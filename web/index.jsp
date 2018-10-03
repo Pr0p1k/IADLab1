@@ -43,15 +43,15 @@
                 <div class="elements">
                     <div id="X_input">
                         <label><span>Величина X</span>
-                            <input type="radio" name="X" value="-3">-3
                             <input type="radio" name="X" value="-2">-2
+                            <input type="radio" name="X" value="-1.5">-1.5
                             <input type="radio" name="X" value="-1">-1
+                            <input type="radio" name="X" value="-0.5">-0.5
                             <input type="radio" name="X" value="0">0
+                            <input type="radio" name="X" value="0.5">0.5
                             <input type="radio" name="X" value="1">1
+                            <input type="radio" name="X" value="1.5">1.5
                             <input type="radio" name="X" value="2">2
-                            <input type="radio" name="X" value="3">3
-                            <input type="radio" name="X" value="4">4
-                            <input type="radio" name="X" value="5">5
                         </label><br>
                         <p class="ok_comment" id="X_comment">Значение X не выбрано</p>
                     </div>
@@ -89,10 +89,10 @@
                 <%--<?php--%>
                 <%--@session_start();--%>
                 <%--if (!isset($_SESSION['history'])) {--%>
-                    <%--$_SESSION['history'] = array();--%>
+                <%--$_SESSION['history'] = array();--%>
                 <%--}--%>
                 <%--foreach ($_SESSION['history'] as $row) {--%>
-                    <%--echo "<tr>";--%>
+                <%--echo "<tr>";--%>
                 <%--echo "--%>
                 <%--<td>$row[0]</td>--%>
                 <%--";--%>
