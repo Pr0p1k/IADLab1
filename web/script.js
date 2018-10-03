@@ -1,14 +1,21 @@
 document.addEventListener('DOMContentLoaded', function () {
-    document.getElementById('r').addEventListener('focusout', function () {
+    document.getElementById('r').addEventListener('input', function () {
         if (checkR(false)) draw();
     });
 
+
     document.getElementById('send').addEventListener('click', check);
+
     let canvas = document.getElementById('result');
-    let width = parseInt(window.getComputedStyle(document.getElementById('computed_result')).width);
-    canvas.width = width;
-    canvas.height = width;
-    console.log(canvas.width + "\n");
+    canvas.width = 1000;
+    canvas.height = 1000;
+    let width = window.getComputedStyle(document.getElementById('computed_result')).width;
+    // document.getElementById('computed_result').height = width;
+    // console.log(window.getComputedStyle(document.getElementById('computed_result')).width);
+    console.log("default = " + width);
+    //canvas.width = width;
+    // canvas.height = width;
+    // console.log(" width = " + canvas.width + " height = " + canvas.height);
 });
 
 
@@ -80,8 +87,12 @@ function checkR(change = true) {
         r = R;
         let canvas = document.getElementById('computed_result');
         canvas.addEventListener('click', function (event) {
+            console.log("click X = " + event.pageX + "\nclick Y = " + event.pageY + "\nscroll X = "
+                + window.pageXOffset + "\nscroll Y = " + window.pageYOffset
+                + "\n canvas X = " + canvas.getBoundingClientRect().left + "\n canvas Y = " + canvas.getBoundingClientRect().top);
             let X = event.pageX - canvas.getBoundingClientRect().left;
-            let Y = event.pageY - canvas.getBoundingClientRect().top - document.documentElement.scrollTop;
+            let Y = event.pageY - (canvas.getBoundingClientRect().top + window.pageYOffset);
+            console.log(" draw X = " + X + " draw Y = " + Y);
             drawDot(X, Y);
         });
     }
@@ -99,16 +110,17 @@ function draw() {
 
 function drawLines(canvas, context, width, height) {
     context.fillStyle = "black";
+    context.font = "normal normal normal 16px arial";
     context.beginPath();
     context.moveTo(width / 2, height);
     context.lineTo(width / 2, 0);
-    context.fillText("  Y", width / 2, height * 0.05);
+    context.fillText("  Y", width * 0.52, height * 0.03);
     context.lineTo(width / 2 - width * 0.01, width * 0.03);
     context.moveTo(width / 2, 0);
     context.lineTo(width / 2 + width * 0.01, width * 0.03);
     context.moveTo(0, height / 2);
     context.lineTo(width, height / 2);
-    context.fillText("X", width * 0.97, height * 0.57);
+    context.fillText("X", width * 0.97, height * 0.53);
     context.lineTo(width - width * 0.03, height / 2 - height * 0.01);
     context.moveTo(width, height / 2);
     context.lineTo(width - width * 0.03, height / 2 + height * 0.01);
@@ -170,12 +182,14 @@ function drawDot(X, Y) {
     let canvas = document.getElementById("result");
     let context = canvas.getContext("2d");
     let radius = canvas.width / 100;
-    // let X = width / 2 + width * 0.4 * x / r - radius / 2;
-    // let Y = height / 2 - height * 0.4 * y / r - radius / 2;
     let red = Math.random() * 255;
     let green = Math.random() * 255;
     let blue = Math.random() * 255;
     context.fillStyle = 'rgb(' + red + ', ' + green + ', ' + blue + ')';
+    let blockWidth = parseInt(window.getComputedStyle(document.getElementById('computed_result')).width);
+    X = X / blockWidth * canvas.width;
+    Y = Y / blockWidth * canvas.height;
+    console.log("X = " + X + " Y = " + Y);
     context.fillRect(X, Y, radius, radius);
 }
 

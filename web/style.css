@@ -134,17 +134,18 @@ body {
 }
 
 #computed_result {
+    position: relative;
     background-color: white;
     width: auto;
-    height: fit-content;
 }
-
-#computed_result {
-    position: relative;
-    margin: auto;
+#computed_result:after {
+    content: "";
+    display: block;
+    padding-bottom: 100%;
 }
 
 #computed_result canvas {
+    position: absolute;
     width: 100%;
     height: 100%;
 }
