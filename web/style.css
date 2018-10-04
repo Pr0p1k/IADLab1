@@ -68,11 +68,13 @@ body {
     width: 60%;
     overflow: hidden;
     float: left;
+    word-wrap: break-word;
     margin-right: 10px;
+    background: white;
 }
 
 #text {
-    width: 100%;
+    margin: 10px;
 }
 
 .main div {

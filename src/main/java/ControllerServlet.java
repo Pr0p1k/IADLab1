@@ -1,19 +1,26 @@
+import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 public class ControllerServlet extends HttpServlet {
-    @Override
+    private static final long serialVersionUID = 1L;
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.getServletContext().getRequestDispatcher("index.jsp").forward(request, response);
+    }
+
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String X = request.getParameter("X");
-        String Y = request.getParameter("Y");
-        String Z = request.getParameter("Z");
-        if (X == null || Y == null || Z == null) {
-            request.getRequestDispatcher("/index.jsp").forward(request, response);
+        //Check if received request is valid
+        String xVal = request.getParameter("X");
+        String yVal = request.getParameter("Y");
+        String rVal = request.getParameter("R");
+        if (xVal == null || yVal == null || rVal == null) {
+            request.getServletContext().getRequestDispatcher("/index.jsp").forward(request, response);
         } else {
-            request.getRequestDispatcher("AreaCheckServlet").forward(request, response);
+            request.getServletContext().getRequestDispatcher("/check").forward(request, response);
         }
     }
+
 }
