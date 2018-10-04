@@ -34,15 +34,17 @@ public class AreaCheckServlet extends HttpServlet {
 
         response.setContentType("text/html");
         PrintWriter out = response.getWriter();
-        String head = "<!DOCTYPE HTML> <html> <head> <meta charset='UTF-8'> <title>Points</title>" + "</head> <body> <center>";
-        String tableHeader = "<br> <table id=\"output\"><thead><tr><td>X</td><td>Y</td><td>R</td><td>Inside</td></tr></thead>";
-        String tableFooter = "</table>";
+        String head = "<!DOCTYPE HTML> <html> <head> <meta charset='UTF-8'> <title>Points</title>" + "</head> <body>";
+        String tableHeader = "<br> <table id=\"output\">" +
+                "<thead><tr><td>X</td><td>Y</td><td>R</td><td>Inside</td></tr></thead>";
+        String Footer = "</table></body></body>";
         out.print(head + tableHeader);
         out.printf("<tr><td>%f</td><td>%f</td><td>%f</td><td>%s</td></tr>",
                 params.get(params.size() - 1)[0],
                 params.get(params.size() - 1)[1],
                 params.get(params.size() - 1)[2],
                 params.get(params.size() - 1)[3] == 1 ? "Да" : "Нет");
+        out.print(Footer);
     }
 
     private boolean checkArea(double X, double Y, double R) {
