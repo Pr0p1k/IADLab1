@@ -86,17 +86,27 @@ function checkR(change = true) {
     if (passed) {
         r = R;
         let canvas = document.getElementById('computed_result');
-        canvas.addEventListener('click', function (event) {
-            console.log("click X = " + event.pageX + "\nclick Y = " + event.pageY + "\nscroll X = "
-                + window.pageXOffset + "\nscroll Y = " + window.pageYOffset
-                + "\n canvas X = " + canvas.getBoundingClientRect().left + "\n canvas Y = " + canvas.getBoundingClientRect().top);
-            let X = event.pageX - canvas.getBoundingClientRect().left;
-            let Y = event.pageY - (canvas.getBoundingClientRect().top + window.pageYOffset);
-            console.log(" draw X = " + X + " draw Y = " + Y);
-            drawDot(X, Y);
-        });
+        canvas.addEventListener('click', pickPoint);
     }
     return passed;
+}
+
+function pickPoint(event) {
+    let canvas = document.getElementById('computed_result');
+    console.log("click X = " + event.pageX + "\nclick Y = " + event.pageY + "\nscroll X = "
+        + window.pageXOffset + "\nscroll Y = " + window.pageYOffset
+        + "\n canvas X = " + canvas.getBoundingClientRect().left + "\n canvas Y = "
+        + canvas.getBoundingClientRect().top);
+    let X = event.pageX - canvas.getBoundingClientRect().left;
+    let Y = event.pageY - (canvas.getBoundingClientRect().top + window.pageYOffset);
+    let blockWidth = parseInt(window.getComputedStyle(document.getElementById('computed_result')).width);
+    X = X / blockWidth * 1000;
+    Y = Y / blockWidth * 1000;
+    x = (X - 500) / 200;
+    y = (Y - 500) / 200;
+    console.log(" draw X = " + X + " draw Y = " + Y);
+    drawDot(X, Y);
+    compute();
 }
 
 function draw() {
@@ -186,9 +196,6 @@ function drawDot(X, Y) {
     let green = Math.random() * 255;
     let blue = Math.random() * 255;
     context.fillStyle = 'rgb(' + red + ', ' + green + ', ' + blue + ')';
-    let blockWidth = parseInt(window.getComputedStyle(document.getElementById('computed_result')).width);
-    X = X / blockWidth * canvas.width;
-    Y = Y / blockWidth * canvas.height;
     console.log("X = " + X + " Y = " + Y);
     context.fillRect(X, Y, radius, radius);
 }
@@ -196,26 +203,21 @@ function drawDot(X, Y) {
 function compute() {
     drawDot();
     $.ajax({
-        url: 'handler.php',
+        url: '/control',
         type: 'GET',
         data: {X: x, Y: y, R: r},
         success: function (data) {
             console.log(x + " " + y + " " + r + ";\n");
-            let table = $(document).find("#table_result");
-            let currentTime = data.split("\n")[0];
-            let leadTime = data.split("\n")[1];
-            let result = data.split("\n")[2];
+            let answer = data.substring(data.indexOf("id=\"answer\"") + 12, data.indexOf("</td>"));
             let au = new Audio();
-            if (result === "true") au.src = 'sound/true.mp3';
+            if (answer === "Да") au.src = 'sound/true.mp3';
             else au.src = 'sound/false.mp3';
             au.play();
             let row = $("<tr/>");
             row.append($('<td/>').text(x));
             row.append($('<td/>').text(y));
             row.append($('<td/>').text(r));
-            row.append($('<td/>').text(currentTime));
-            row.append($('<td/>').text(leadTime));
-            row.append($('<td/>').text(result));
+            row.append($('<td/>').text(answer));
             table.append(row);
         },
         error: function () {

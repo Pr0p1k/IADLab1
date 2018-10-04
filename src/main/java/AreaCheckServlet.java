@@ -39,7 +39,7 @@ public class AreaCheckServlet extends HttpServlet {
                 "<thead><tr><td>X</td><td>Y</td><td>R</td><td>Inside</td></tr></thead>";
         String Footer = "</table></body></body>";
         out.print(head + tableHeader);
-        out.printf("<tr><td>%f</td><td>%f</td><td>%f</td><td>%s</td></tr>",
+        out.printf("<tr><td>%f</td><td>%f</td><td>%f</td><td id=\"answer\">%s</td></tr>",
                 params.get(params.size() - 1)[0],
                 params.get(params.size() - 1)[1],
                 params.get(params.size() - 1)[2],
