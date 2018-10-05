@@ -152,6 +152,20 @@ body {
     height: 100%;
 }
 
+#warning {
+    position: absolute;
+    z-index: 90;
+    background-color: wheat;
+    border-radius: 10px 0 0 10px;
+    width: 20%;
+    left: 100%;
+    display: none;
+}
+
+#warning p {
+    margin: 5px;
+}
+
 .btn:hover {
     background-color: #9be7ff;
 }

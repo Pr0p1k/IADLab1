@@ -3,10 +3,10 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 
 public class AreaCheckServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
@@ -25,9 +25,11 @@ public class AreaCheckServlet extends HttpServlet {
             set[0] = Double.parseDouble(request.getParameter("X"));
             set[1] = Double.parseDouble(request.getParameter("Y"));
             set[2] = Double.parseDouble(request.getParameter("R"));
-            set[4] = checkArea(set[0], set[1], set[2]) ? 1 : 0;
+            set[3] = checkArea(set[0], set[1], set[2]) ? 1 : 0;
             params.add(set);
         } catch (Exception exc) {
+            System.out.println(exc.getMessage());
+            System.out.println(exc.getStackTrace());
             request.getServletContext().getRequestDispatcher("/index.jsp").forward(request, response);
         }
 
@@ -43,7 +45,7 @@ public class AreaCheckServlet extends HttpServlet {
                 params.get(params.size() - 1)[0],
                 params.get(params.size() - 1)[1],
                 params.get(params.size() - 1)[2],
-                params.get(params.size() - 1)[3] == 1 ? "Да" : "Нет");
+                params.get(params.size() - 1)[3] == 1 ? "+" : "-");
         out.print(Footer);
     }
 

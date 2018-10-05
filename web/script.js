@@ -1,9 +1,10 @@
 document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('r').addEventListener('input', function () {
         if (checkR(false)) draw();
+        isDrawn = true;
+        hideWarning();
     });
-
-
+    document.getElementById('computed_result').addEventListener('click', pickPoint);
     document.getElementById('send').addEventListener('click', check);
 
     let canvas = document.getElementById('result');
@@ -19,7 +20,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 
-let x, y, r;
+let x, y, r, isDrawn;
 
 function check(btn) {
     btn.preventDefault();
@@ -83,30 +84,49 @@ function checkR(change = true) {
         document.getElementById("R_input").classList.remove("error");
         document.getElementById("R_comment").classList.replace("error_comment", "ok_comment");
     }
-    if (passed) {
-        r = R;
-        let canvas = document.getElementById('computed_result');
-        canvas.addEventListener('click', pickPoint);
-    }
+    if (passed) r = R;
     return passed;
 }
 
 function pickPoint(event) {
-    let canvas = document.getElementById('computed_result');
-    console.log("click X = " + event.pageX + "\nclick Y = " + event.pageY + "\nscroll X = "
-        + window.pageXOffset + "\nscroll Y = " + window.pageYOffset
-        + "\n canvas X = " + canvas.getBoundingClientRect().left + "\n canvas Y = "
-        + canvas.getBoundingClientRect().top);
-    let X = event.pageX - canvas.getBoundingClientRect().left;
-    let Y = event.pageY - (canvas.getBoundingClientRect().top + window.pageYOffset);
-    let blockWidth = parseInt(window.getComputedStyle(document.getElementById('computed_result')).width);
-    X = X / blockWidth * 1000;
-    Y = Y / blockWidth * 1000;
-    x = (X - 500) / 200;
-    y = (Y - 500) / 200;
-    console.log(" draw X = " + X + " draw Y = " + Y);
-    drawDot(X, Y);
-    compute();
+    if (isDrawn) {
+        let canvas = document.getElementById('computed_result');
+        console.log("click X = " + event.pageX + "\nclick Y = " + event.pageY + "\nscroll X = "
+            + window.pageXOffset + "\nscroll Y = " + window.pageYOffset
+            + "\n canvas X = " + canvas.getBoundingClientRect().left + "\n canvas Y = "
+            + canvas.getBoundingClientRect().top);
+        let X = event.pageX - canvas.getBoundingClientRect().left;
+        let Y = event.pageY - (canvas.getBoundingClientRect().top + window.pageYOffset);
+        let blockWidth = parseInt(window.getComputedStyle(document.getElementById('computed_result')).width);
+        X = X / blockWidth * 1000;
+        Y = Y / blockWidth * 1000;
+        x = (X - 500) / 400 * r;
+        y = -(Y - 500) / 400 * r;
+        console.log(" draw X = " + X + " draw Y = " + Y);
+        drawDot(X, Y);
+        compute();
+    } else showWarning();
+}
+
+function showWarning() {
+    let warning = document.getElementById("warning");
+    warning.style.display = "block";
+    warning.style.top = document.getElementById("script_output").getBoundingClientRect().top + window.pageYOffset;
+    $("#warning").animate({
+        left: "80%"
+    }, 1000);
+}
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+async function hideWarning() {
+    $("#warning").animate({
+        left: "100%"
+    }, 1000);
+    await sleep(1000);
+    document.getElementById("warning").style.display = "none";
 }
 
 function draw() {
@@ -202,28 +222,48 @@ function drawDot(X, Y) {
 
 function compute() {
     drawDot();
+    x.toFixed(2);
+    Number(y).toFixed(2);
+    Number(r).toFixed(2);
     $.ajax({
-        url: '/control',
+        url: 'control',
         type: 'GET',
         data: {X: x, Y: y, R: r},
         success: function (data) {
             console.log(x + " " + y + " " + r + ";\n");
-            let answer = data.substring(data.indexOf("id=\"answer\"") + 12, data.indexOf("</td>"));
+            let start = data.indexOf("id=\"answer\"") + 12;
+            let end = data.lastIndexOf("</td>");
+            console.log("start " + start + "; end " + end);
+            let answer = data.substring(start, end);
+            console.log(answer);
             let au = new Audio();
-            if (answer === "Р”Р°") au.src = 'sound/true.mp3';
+            if (answer === "Да") au.src = 'sound/true.mp3';
             else au.src = 'sound/false.mp3';
             au.play();
-            let row = $("<tr/>");
-            row.append($('<td/>').text(x));
-            row.append($('<td/>').text(y));
-            row.append($('<td/>').text(r));
-            row.append($('<td/>').text(answer));
+            let table = document.getElementById("table_result");
+            let row = document.createElement("tr");
+            let cellX = document.createElement("td");
+            let cellY = document.createElement("td");
+            let cellR = document.createElement("td");
+            let cellAnswer = document.createElement("td");
+            let htmlX = document.createTextNode(x);
+            let htmlY = document.createTextNode(y);
+            let htmlR = document.createTextNode(r);
+            let htmlAnswer = document.createTextNode(answer);
+            cellX.appendChild(htmlX);
+            cellY.appendChild(htmlY);
+            cellR.appendChild(htmlR);
+            cellAnswer.appendChild(htmlAnswer);
+            row.appendChild(cellX);
+            row.appendChild(cellY);
+            row.appendChild(cellR);
+            row.appendChild(cellAnswer);
             table.append(row);
         },
         error: function () {
             let table = $(document).find("#table_result");
             let row = $("<tr/>");
-            let cell = $("<td colspan='6'/>").text("РџСЂРѕРёР·РѕС€Р»Р° РѕС€РёР±РєР°");
+            let cell = $("<td colspan='4'/>").text("Произошла ошибка");
             row.append(cell);
             table.append(row);
         }

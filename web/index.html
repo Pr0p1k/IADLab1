@@ -106,19 +106,21 @@
                     <td>Попадание</td>
                 </tr>
                 </thead>
-                <!--<% ArrayList<double[]> params = request.getSession().getAttribute("params");-->
-                    <!--for (double[] result : params) {%>-->
+                <!--<% ArrayList<double[]> params = (ArrayList<double[]>) request.getSession().getAttribute("params");-->
+                <!--if (params != null) {-->
+                <!--for (double[] result : params) {%>-->
                 <!--<tr>-->
-                    <!--<td><%=result[0]%>-->
-                    <!--</td>-->
-                    <!--<td><%=result[1]%>-->
-                    <!--</td>-->
-                    <!--<td><%=result[2]%>-->
-                    <!--</td>-->
-                    <!--<td><%=result[3] == 1 ? "Да" : "Нет"%>-->
-                    <!--</td>-->
+                <!--<td><%=result[0]%>-->
+                <!--</td>-->
+                <!--<td><%=result[1]%>-->
+                <!--</td>-->
+                <!--<td><%=result[2]%>-->
+                <!--</td>-->
+                <!--<td><%=result[3] == 1 ? "Да" : "Нет"%>-->
+                <!--</td>-->
                 <!--</tr>-->
-                <!--<% } %>-->
+                <!--<% }-->
+                <!--} %>-->
             </table>
         </div>
     </div>
@@ -129,6 +131,9 @@
 <div class="main" id="footer">
     <p id="educator">Письмак А.Е.</p>
     <p id="info">Санкт-Петербург 2018 год</p>
+</div>
+<div id="warning">
+    <p>Радиус области ещё не задан<br>Введите значение в поле R</p>
 </div>
 </body>
 </html>
