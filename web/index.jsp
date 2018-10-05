@@ -1,6 +1,6 @@
-<!--<%@ page import="java.util.ArrayList" %>-->
-<!--<%@ page import="javax.servlet.http.HttpSession" %>-->
-<!--<%@ page contentType="text/html;charset=UTF-8" language="java" %>-->
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="javax.servlet.http.HttpSession" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html lang="ru">
 <head>
     <title>ПИП</title>
@@ -106,21 +106,21 @@
                     <td>Попадание</td>
                 </tr>
                 </thead>
-                <!--<% ArrayList<double[]> params = (ArrayList<double[]>) request.getSession().getAttribute("params");-->
-                <!--if (params != null) {-->
-                <!--for (double[] result : params) {%>-->
-                <!--<tr>-->
-                <!--<td><%=result[0]%>-->
-                <!--</td>-->
-                <!--<td><%=result[1]%>-->
-                <!--</td>-->
-                <!--<td><%=result[2]%>-->
-                <!--</td>-->
-                <!--<td><%=result[3] == 1 ? "Да" : "Нет"%>-->
-                <!--</td>-->
-                <!--</tr>-->
-                <!--<% }-->
-                <!--} %>-->
+                <% ArrayList<double[]> params = (ArrayList<double[]>) request.getSession().getAttribute("params");
+                if (params != null) {
+                for (double[] result : params) {%>
+                <tr>
+                <td><%=result[0]%>
+                </td>
+                <td><%=result[1]%>
+                </td>
+                <td><%=result[2]%>
+                </td>
+                <td><%=result[3] == 1 ? "+" : "-"%>
+                </td>
+                </tr>
+                <% }
+                } %>
             </table>
         </div>
     </div>

@@ -25,7 +25,10 @@ let x, y, r, isDrawn;
 function check(btn) {
     btn.preventDefault();
 
-    if (checkR() & checkX() & checkY()) compute();
+    if (checkR() & checkX() & checkY()) {
+        drawDot(x / r * 400 + 500, -y / r * 400 + 500);
+        compute();
+    }
 }
 
 function checkY() {
@@ -114,7 +117,7 @@ function showWarning() {
     warning.style.top = document.getElementById("script_output").getBoundingClientRect().top + window.pageYOffset;
     $("#warning").animate({
         left: "80%"
-    }, 1000);
+    }, 700);
 }
 
 function sleep(ms) {
@@ -222,22 +225,29 @@ function drawDot(X, Y) {
 
 function compute() {
     drawDot();
-    x.toFixed(2);
-    Number(y).toFixed(2);
-    Number(r).toFixed(2);
+    x = Number(x).toFixed(2);
+    y = Number(y).toFixed(2);
+    r = Number(r).toFixed(2);
     $.ajax({
         url: 'control',
         type: 'GET',
         data: {X: x, Y: y, R: r},
         success: function (data) {
             console.log(x + " " + y + " " + r + ";\n");
-            let start = data.indexOf("id=\"answer\"") + 12;
+            let start = data.lastIndexOf("<td>") + 4;
             let end = data.lastIndexOf("</td>");
-            console.log("start " + start + "; end " + end);
             let answer = data.substring(start, end);
+            if (answer === "Incorrect values were sent") {
+                let table = $(document).find("#table_result");
+                let row = $("<tr/>");
+                let cell = $("<td colspan='4'/>").text("Отправленные данные некорректны");
+                row.append(cell);
+                table.append(row);
+                return;
+            }
             console.log(answer);
             let au = new Audio();
-            if (answer === "��") au.src = 'sound/true.mp3';
+            if (answer.includes("+")) au.src = 'sound/true.mp3';
             else au.src = 'sound/false.mp3';
             au.play();
             let table = document.getElementById("table_result");
@@ -263,7 +273,7 @@ function compute() {
         error: function () {
             let table = $(document).find("#table_result");
             let row = $("<tr/>");
-            let cell = $("<td colspan='4'/>").text("��������� ������");
+            let cell = $("<td colspan='4'/>").text("Произошла ошибка");
             row.append(cell);
             table.append(row);
         }

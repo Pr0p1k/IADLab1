@@ -3,6 +3,7 @@ body {
     padding: 0;
     background-color: #64b5f6;
     font-size: 16px;
+    overflow-x: hidden;
 }
 
 .header {
@@ -140,6 +141,7 @@ body {
     background-color: white;
     width: auto;
 }
+
 #computed_result:after {
     content: "";
     display: block;
@@ -159,6 +161,7 @@ body {
     border-radius: 10px 0 0 10px;
     width: 20%;
     left: 100%;
+    overflow: hidden;
     display: none;
 }
 
